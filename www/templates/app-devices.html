@@ -1,0 +1,23 @@
+<ion-view view-title="Devices">
+  <ion-nav-buttons side="left" >
+    <button class="button back-button buttons button-clear header-item" ng-click="back()">
+      <i class="icon ion-ios-arrow-back"> Back</i> 
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right" >
+    <button class="button back-button buttons button-clear header-item" ng-click="add()">
+      Add 
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar" ng-repeat="device in devices" type="item-text-wrap">
+        <h2>{{device.name}}</h2>
+        <p>{{device.deviceID}}</p>
+        <ion-option-button class="button-assertive" ng-click="remove(device)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

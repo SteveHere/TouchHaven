@@ -1,0 +1,29 @@
+<ion-view view-title="Settings">
+  <ion-content>
+    <ion-list>
+      <ion-toggle ng-model="settings.enableTracking">
+          Always show location
+      </ion-toggle>
+      <ion-toggle class="item-text-wrap" ng-model="settings.enableAutoText">
+          Send distress text to selected contacts
+      </ion-toggle>
+      <ion-item ng-click="goToContacts()">
+          Manage contacts
+      </ion-item>
+      <ion-item ng-click="goToDevices()">
+          Manage wearable devices
+      </ion-item>
+      <ion-toggle ng-model="settings.enableClosestPolice">
+          Displays closest police station
+      </ion-toggle>
+      <ion-item href="#/tandc">
+         	Terms and Conditions
+      </ion-item>
+      <ion-item class="center" href="#/login">
+       	Logged in as: user
+        <br>
+        Logout
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

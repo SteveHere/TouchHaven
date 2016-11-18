@@ -27,11 +27,15 @@ angular.module('starter.services', [])
 .service('RegisterService', function($q) {
     //Temporary thing, will implement actual one later 
     return {
-        registerUser: function(name, pw) {
+        registerUser: function(name, pw, pw2) {
             var deferred = $q.defer();
             var promise = deferred.promise;
  
-            deferred.resolve('Welcome ' + name + '!');
+            if(pw == pw2){
+                deferred.resolve('Welcome ' + name + '!');
+            } else {
+                deferred.reject('Different password inputs.')
+            }
             
             promise.success = function(fn) {
                 promise.then(fn);

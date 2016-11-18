@@ -8,10 +8,19 @@ angular.module('starter.controllers', [])
 
 .controller('MainCtrl', function($scope, $ionicPopup) {
   $scope.call = function(){
+    //To be implemented later
+    //if(there is cellular connection)
     var alertPopup = $ionicPopup.alert({
       title: 'Calling 999'
     });
     console.log("Calling 999");
+    /*
+    else{
+      var alertPopup = $ionicPopup.alert({
+        title: 'Failed to call 999'
+      });
+    }
+    */
   };
 })
 
@@ -110,7 +119,8 @@ angular.module('starter.controllers', [])
   $scope.registerData = {};
  
   $scope.register = function() {
-    RegisterService.registerUser($scope.registerData.username, $scope.registerData.password).success(function(data) {
+    RegisterService.registerUser($scope.registerData.username, 
+      $scope.registerData.password, $scope.registerData.password2).success(function(data) {
           $state.go('app.main');
       }).error(function(data) {
           var alertPopup = $ionicPopup.alert({

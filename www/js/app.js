@@ -55,18 +55,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     controller: 'RegisterCtrl'
   })
 
-    .state('tandc', {
-    url: '/tandc',
-    templateUrl: 'templates/app-tandc.html',
-    controller: 'TandCCtrl'
-  })
-
-    .state('contacts', {
-    url: '/contacts',
-    templateUrl: 'templates/app-contacts.html',
-    controller: 'ContactsCtrl'  
-  })
-
+    
   .state('app.main', {
     url: '/main',
     views: {
@@ -87,16 +76,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
 
-  .state('app.devices', {
-    url: '/devices',
-    views: {
-      'app-devices': {
-        templateUrl: 'templates/app-devices.html',
-        controller: 'DevicesCtrl'
-      }
-    }
-  })
-
   .state('app.map', {
     url: '/map',
     views: {
@@ -105,7 +84,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'MapCtrl'
       }
     }
+  })
+
+  //--Settings stuff begins here--
+  .state('tandc', {
+    url: '/tandc',
+    templateUrl: 'templates/settings/tandc.html',
+    controller: 'TandCCtrl'
+  })
+
+  .state('contacts', {
+    url: '/contacts',
+    templateUrl: 'templates/settings/contacts.html',
+    controller: 'ContactsCtrl'  
+  })
+
+  .state('devices', {
+    url: '/devices',
+    templateUrl: 'templates/settings/devices.html',
+    controller: 'DevicesCtrl'
+  })
+
+  .state('account', {
+    url: '/account',
+    templateUrl: 'templates/settings/account.html',
+    controller: 'AccountCtrl'
   });
+  //--Settings stuff ends here--
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/start');

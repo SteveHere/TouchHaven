@@ -30,8 +30,43 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('AccountCtrl', function($scope, $state) {
+  $scope.loginData = {};
+ 
+  $scope.usernameChange = function() {
+    AccountService.changeUsername($scope.loginData.username, $scope.loginData.password).success(function(data) {
+          var alertPopup = $ionicPopup.alert({
+              title: 'Change of username successfull!'
+          });
+      }).error(function(data) {
+          var alertPopup = $ionicPopup.alert({
+              title: 'Change of username failed!',
+              template: 'Please check your details!'
+          });
+      });
+  };
+
+  $scope.passwordChange = function() {
+    AccountService.changePassword($scope.loginData.oldPassword, $scope.loginData.newPassword, $scope.loginData.newPassword2).success(function(data) {
+          var alertPopup = $ionicPopup.alert({
+              title: 'Change of password successfull!'
+          });
+      }).error(function(data) {
+          var alertPopup = $ionicPopup.alert({
+              title: 'Change of password failed!',
+              template: 'Please check your details!'
+          });
+      });
+  };
+
+  $scope.back = function () {
+    $state.go('app.settings');
+  };
+})
+
 .controller('ContactsCtrl', function($scope, $state, $ionicPopup, Contacts) {
   $scope.contacts = Contacts.all();
+
   $scope.remove = function(contact) {
     Contacts.remove(contact);
   };
@@ -41,7 +76,7 @@ angular.module('starter.controllers', [])
     var image = 'cdn4.iconfinder.com/data/icons/defaulticon/icons/png/256x256/media-shuffle.png';
     $scope.addData = {};
     var myPopUp = $ionicPopup.alert({      
-      title: 'Enter details',
+      title: 'Enter contactdetails',
       template: '<input type="text" ng-model="addData.name"><br><input type="text" ng-model="addData.number">',
       scope: $scope,
       buttons: [{
@@ -56,11 +91,51 @@ angular.module('starter.controllers', [])
         }
       }]
     });
-    setTimeout(function() {
+    myPopUp.then(function() {
       console.log($scope.addData.name + ',' + $scope.addData.number);
       Contacts.add(id, $scope.addData.name, $scope.addData.number, image);
-    }, 10000);
+      $state.reload();
+    });
   };
+
+  $scope.back = function () {
+    $state.go('app.settings');
+  };
+})
+
+.controller('DevicesCtrl', function($scope, $state, $ionicPopup, Contacts) {
+  $scope.contacts = Devices.all();
+  
+  $scope.remove = function(device) {
+    Devices.remove(device);
+  };
+
+  $scope.add = function(name, deviceID){
+    var id = Devices.getNewID();
+    $scope.addData = {};
+    var myPopUp = $ionicPopup.alert({      
+      title: 'Enter device details',
+      template: '<input type="text" ng-model="addData.name"><br><input type="text" ng-model="addData.number">',
+      scope: $scope,
+      buttons: [{
+        text: '<b>Add</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          if (!$scope.addData.name & !$scope.addData.number) {
+            e.preventDefault();
+          } else {
+            return $scope.addData.name + ',' + $scope.addData.number;
+          }
+        }
+      }]
+    });
+    myPopUp.then(function() {
+      console.log($scope.addData.name + ',' + $scope.addData.number);
+      Devices.add(id, $scope.addData.name, $scope.addData.number);
+      $state.reload();
+    });
+  };
+
   $scope.back = function () {
     $state.go('app.settings');
   };
@@ -73,12 +148,20 @@ angular.module('starter.controllers', [])
     enableClosestPolice: true,
   };
 
+  $scope.goToAccount = function() {
+    $state.go('account');
+  };
+
   $scope.goToContacts = function() {
     $state.go('contacts');
   };
 
   $scope.goToDevices = function() {
-    $state.go('app.devices');
+    $state.go('devices');
+  };
+
+  $scope.goToTandC = function() {
+    $state.go('tandc');
   };
 })
 

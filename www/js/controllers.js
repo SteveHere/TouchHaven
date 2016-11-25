@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('StartCtrl', function($scope, $state) {
+.controller('StartCtrl', function($scope, $state, StoreService) {
   setTimeout(function() {
     $state.go('login');
   }, 2000);
@@ -10,10 +10,10 @@ angular.module('starter.controllers', [])
   $scope.call = function(){
     //To be implemented later
     //if(there is cellular connection)
-    var alertPopup = $ionicPopup.alert({
-      title: 'Calling 999'
+    $ionicPopup.alert({
+      title: 'Calling 999 and messaging emergency contacts'
     });
-    console.log("Calling 999");
+    console.log("Calling 999 and messaging emergency contacts");
     /*
     else{
       var alertPopup = $ionicPopup.alert({
@@ -30,33 +30,46 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('AccountCtrl', function($scope, $state) {
-  $scope.loginData = {};
+.controller('AccountCtrl', function($scope, $state, $ionicPopup, AccountService) {
+  $scope.accountData = {};
  
-  $scope.usernameChange = function() {
-    AccountService.changeUsername($scope.loginData.username, $scope.loginData.password).success(function(data) {
-          var alertPopup = $ionicPopup.alert({
-              title: 'Change of username successfull!'
+  $scope.dataChange = function() {
+    if( ($scope.accountData.username != null) && ($scope.accountData.password != null) ){
+      AccountService.changeUsername($scope.accountData.username, $scope.accountData.password).success(function(data) {
+          $ionicPopup.alert({
+              title: 'Change of username successfull, ' + $scope.accountData.username + '!'
           });
+          $scope.accountData.username = null;
+          $scope.accountData.password = null;
       }).error(function(data) {
-          var alertPopup = $ionicPopup.alert({
+          $ionicPopup.alert({
               title: 'Change of username failed!',
               template: 'Please check your details!'
           });
       });
-  };
-
-  $scope.passwordChange = function() {
-    AccountService.changePassword($scope.loginData.oldPassword, $scope.loginData.newPassword, $scope.loginData.newPassword2).success(function(data) {
-          var alertPopup = $ionicPopup.alert({
+    }
+    else if( ($scope.accountData.oldPassword != null) && ($scope.accountData.newPassword != null) 
+      && ($scope.accountData.newPassword2 != null) ){
+      AccountService.changePassword($scope.accountData.oldPassword, $scope.accountData.newPassword,
+       $scope.accountData.newPassword2).success(function(data) {
+          $ionicPopup.alert({
               title: 'Change of password successfull!'
           });
+          $scope.accountData.oldPassword = null;
+          $scope.accountData.newPassword = null;
+          $scope.accountData.newPassword2 = null;
       }).error(function(data) {
-          var alertPopup = $ionicPopup.alert({
+          $ionicPopup.alert({
               title: 'Change of password failed!',
               template: 'Please check your details!'
           });
       });
+    }
+    else{
+      $ionicPopup.alert({
+        title: 'No data has been entered.'
+      });
+    }
   };
 
   $scope.back = function () {
@@ -71,13 +84,14 @@ angular.module('starter.controllers', [])
     Contacts.remove(contact);
   };
 
+  //TODO: add 'insert image' functionality
   $scope.add = function(name, phoneNumber, image){
     var id = Math.floor(Math.random() * 60000);
     var image = 'cdn4.iconfinder.com/data/icons/defaulticon/icons/png/256x256/media-shuffle.png';
     $scope.addData = {};
     var myPopUp = $ionicPopup.alert({      
-      title: 'Enter contactdetails',
-      template: '<input type="text" ng-model="addData.name"><br><input type="text" ng-model="addData.number">',
+      title: 'Enter contact details',
+      template: 'Name<input type="text" ng-model="addData.name"><br>Phone Number<input type="text" ng-model="addData.number">',
       scope: $scope,
       buttons: [{
         text: '<b>Add</b>',
@@ -92,7 +106,6 @@ angular.module('starter.controllers', [])
       }]
     });
     myPopUp.then(function() {
-      console.log($scope.addData.name + ',' + $scope.addData.number);
       Contacts.add(id, $scope.addData.name, $scope.addData.number, image);
       $state.reload();
     });
@@ -103,35 +116,36 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('DevicesCtrl', function($scope, $state, $ionicPopup, Contacts) {
-  $scope.contacts = Devices.all();
+.controller('DevicesCtrl', function($scope, $state, $ionicPopup, Devices) {
+  $scope.devices = Devices.all();
   
   $scope.remove = function(device) {
     Devices.remove(device);
   };
 
+  //TODO: replace this with bluetooth connect capability
   $scope.add = function(name, deviceID){
     var id = Devices.getNewID();
     $scope.addData = {};
     var myPopUp = $ionicPopup.alert({      
       title: 'Enter device details',
-      template: '<input type="text" ng-model="addData.name"><br><input type="text" ng-model="addData.number">',
+      template: 'Name<input type="text" ng-model="addData.name"><br>Device ID<input type="text" ng-model="addData.deviceID">',
       scope: $scope,
       buttons: [{
         text: '<b>Add</b>',
         type: 'button-positive',
         onTap: function(e) {
-          if (!$scope.addData.name & !$scope.addData.number) {
+          if (!$scope.addData.name & !$scope.addData.deviceID) {
             e.preventDefault();
           } else {
-            return $scope.addData.name + ',' + $scope.addData.number;
+            return id + ',' + $scope.addData.name + ',' + $scope.addData.deviceID;
           }
         }
       }]
     });
+
     myPopUp.then(function() {
-      console.log($scope.addData.name + ',' + $scope.addData.number);
-      Devices.add(id, $scope.addData.name, $scope.addData.number);
+      Devices.add(id, $scope.addData.name, $scope.addData.deviceID);
       $state.reload();
     });
   };
@@ -148,33 +162,11 @@ angular.module('starter.controllers', [])
     enableClosestPolice: true,
   };
 
-  $scope.goToAccount = function() {
-    $state.go('account');
-  };
+  $scope.userDetails = 'Logged in as: ' + sessionStorage.getItem('username');
 
-  $scope.goToContacts = function() {
-    $state.go('contacts');
-  };
-
-  $scope.goToDevices = function() {
-    $state.go('devices');
-  };
-
-  $scope.goToTandC = function() {
-    $state.go('tandc');
-  };
-})
-
-.controller('DevicesCtrl', function($scope, $state) {
-  $scope.settings = {
-    enableTracking: true,
-    enableAutoText: true,
-    enableClosestPolice: true,
-  };
-
-  $scope.back = function() {
-    $state.go('app.settings');
-  };
+  $scope.logout = function(){
+    $state.go('login');
+  }
 })
 
 .controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state) {
@@ -185,7 +177,7 @@ angular.module('starter.controllers', [])
     LoginService.loginUser($scope.loginData.username, $scope.loginData.password).success(function(data) {
           $state.go('app.main');
       }).error(function(data) {
-          var alertPopup = $ionicPopup.alert({
+          $ionicPopup.alert({
               title: 'Login failed!',
               template: 'Please check your credentials!'
           });
@@ -206,7 +198,7 @@ angular.module('starter.controllers', [])
       $scope.registerData.password, $scope.registerData.password2).success(function(data) {
           $state.go('app.main');
       }).error(function(data) {
-          var alertPopup = $ionicPopup.alert({
+          $ionicPopup.alert({
               title: 'Register failed!',
               template: 'Please check your credentials!'
           });

@@ -11,9 +11,9 @@
   </ion-nav-buttons>
   <ion-content class="padding">
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar" ng-repeat="device in devices" type="item-text-wrap">
-        <h2>{{device.name}}</h2>
-        <p>{{device.deviceID}}</p>
+      <ion-item class="item-remove-animate" ng-repeat="device in devices" type="item-text-wrap">
+        <h2>Name: {{device.name}}</h2>
+        <p>Device ID: {{device.deviceID}}</p>
         <ion-option-button class="button-assertive" ng-click="remove(device)">
           Delete
         </ion-option-button>

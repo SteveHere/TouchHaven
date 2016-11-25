@@ -16,9 +16,6 @@
 	        <span class="input-label">Password</span>
 	        <input type="password" ng-model="accountData.password">
 	      </label>
-	      <label class="item">
-	        <button class="button button-block button-positive" ng-click="usernameChange()">Save</button>
-	      </label>
 	    </div>
 	  </ion-list>
 	  <br>
@@ -28,7 +25,7 @@
 	    <div class="list list-inset">
 	      <label class="item item-input">
 	        <span class="input-label">Old Password</span>
-	        <input type="text" ng-model="accountData.oldPassword">
+	        <input type="password" ng-model="accountData.oldPassword">
 	      </label>
 	      <label class="item item-input">
 	        <span class="input-label">New Password</span>
@@ -38,10 +35,10 @@
 	        <span class="input-label">Re-enter<br>New Password</span>
 	        <input type="password" ng-model="accountData.newPassword2">
 	      </label>
-	      <label class="item">
-	        <button class="button button-block button-positive" ng-click="passwordChange()">Save</button>
-	      </label>
 	    </div>
 	   </ion-list>
+		<br>
+
+		 <button class="button button-block button-positive" ng-click="dataChange()">Save</button>
    </ion-content>
 </ion-view>

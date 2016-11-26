@@ -2,33 +2,36 @@ angular.module('starter.services', [])
 
 //Initialises the username and password as coded and saves them in sessionStorage
 .service('StoreService', function(){
-  sessionStorage.setItem('username', 'user');
-  sessionStorage.setItem('password', 'secret');
-  var contacts = [{
-    id: 0,    name: 'Ben Sparrow',
-    phoneNumber: '012-234 5678',    face: 'img/ben.png'
-  }, {
-    id: 1,    name: 'Max Lynx',
-    phoneNumber: '013-999 0981',    face: 'img/max.png'
-  }, {
-    id: 2,    name: 'Adam Bradleyson',
-    phoneNumber: '015-677 9231',    face: 'img/adam.jpg'
-  }, {
-    id: 3,    name: 'Perry Governor',
-    phoneNumber: '013-345 6666',    face: 'img/perry.png'
-  }, {
-    id: 4,    name: 'Mike Harrington',
-    phoneNumber: '013-913 9112',    face: 'img/mike.png'
-  }];
-  var devices = [{
-    id: 0,    name: 'Belt',    deviceID: 1233
-  }, {
-    id: 1,    name: 'Watch',    deviceID: 1244
-  }, {
-    id: 2,    name: 'WristBand',    deviceID: 1255
-  }];
-  sessionStorage.setItem('contacts', JSON.stringify(contacts));
-  sessionStorage.setItem('devices', JSON.stringify(devices));
+    //check if the 4 values are there in sessionStorage
+    var dataExists = sessionStorage.getItem('username') != null && sessionStorage.getItem('password') != null 
+        && sessionStorage.getItem('contacts') != null && sessionStorage.getItem('devices') != null;
+    //if the data does not exist or the sessionStorage is not just the 4 values, clear it all and put in new values 
+    if(dataExists != true || sessionStorage.length != 4){
+        sessionStorage.clear();
+        //Store default data if data does not exist
+        sessionStorage.setItem('username', 'user');
+        sessionStorage.setItem('password', 'secret');
+        var contacts = [{
+            id: 0,    name: 'Ben Sparrow',    phoneNumber: '012-234 5678',    face: 'img/ben.png'
+        }, {
+            id: 1,    name: 'Max Lynx',    phoneNumber: '013-999 0981',    face: 'img/max.png'
+        }, {
+            id: 2,    name: 'Adam Bradleyson',    phoneNumber: '015-677 9231',    face: 'img/adam.jpg'
+        }, {
+            id: 3,    name: 'Perry Governor',    phoneNumber: '013-345 6666',    face: 'img/perry.png'
+        }, {
+            id: 4,    name: 'Mike Harrington',    phoneNumber: '013-913 9112',    face: 'img/mike.png'
+        }];
+        var devices = [{
+            id: 0,    name: 'Belt',    deviceID: 1233
+        }, {
+            id: 1,    name: 'Watch',    deviceID: 1244
+        }, {
+            id: 2,    name: 'WristBand',    deviceID: 1255
+        }];
+        sessionStorage.setItem('contacts', JSON.stringify(contacts));
+        sessionStorage.setItem('devices', JSON.stringify(devices));
+    }
 })
 
 .service('LoginService', function($q) {
@@ -68,8 +71,8 @@ angular.module('starter.services', [])
             if(pw == pw2){
                 sessionStorage.setItem('username', name);
                 sessionStorage.setItem('password', pw);
-                sessionStorage.setItem('contacts', null);
-                sessionStorage.setItem('devices', null);
+                sessionStorage.setItem('contacts', JSON.stringify([]));
+                sessionStorage.setItem('devices', JSON.stringify([]));
                 deferred.resolve('Welcome ' + name + '!');
             } else {
                 deferred.reject('Different password inputs.')
@@ -97,7 +100,7 @@ angular.module('starter.services', [])
         return contacts;
     },
     getNewID: function(){
-        return contacts.length;
+        return contacts.length ;
     },
     add: function(id, name, phoneNumber, image) {
         var x = { 

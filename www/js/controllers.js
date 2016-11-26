@@ -86,7 +86,7 @@ angular.module('starter.controllers', [])
 
   //TODO: add 'insert image' functionality
   $scope.add = function(name, phoneNumber, image){
-    var id = Math.floor(Math.random() * 60000);
+    var id = Contacts.getNewID();
     var image = 'cdn4.iconfinder.com/data/icons/defaulticon/icons/png/256x256/media-shuffle.png';
     $scope.addData = {};
     var myPopUp = $ionicPopup.alert({      

@@ -162,7 +162,14 @@ angular.module('starter.controllers', [])
     enableClosestPolice: true,
   };
 
-  $scope.userDetails = 'Logged in as: ' + sessionStorage.getItem('username');
+  var username = sessionStorage.getItem('username');
+  $scope.userDetails = 'Logged in as: ' + username;
+  setInterval( function() { 
+    if(username != sessionStorage.getItem('username')){
+      username = sessionStorage.getItem('username');
+      $scope.userDetails = 'Logged in as: ' + username;
+    }
+  }, 500);
 
   $scope.logout = function(){
     $state.go('login');
